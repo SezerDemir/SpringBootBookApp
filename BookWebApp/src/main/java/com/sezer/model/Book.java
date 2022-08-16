@@ -14,6 +14,7 @@ public class Book
     @Column(name = "id", updatable = false, nullable = false)
 	private int id;
 	
+	@Column(name = "name")
 	private String book_name;
 	
 	public Book()
