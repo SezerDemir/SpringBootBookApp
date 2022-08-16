@@ -45,20 +45,27 @@ public class BookController
 	@RequestMapping("/updateBook")
 	public String updateBookOperation(Book entity)
 	{
-		Book book = book_repo.findById(entity.getId()).get();
-		book.setName(entity.getName());
-		book_repo.save(book);
-		
-		printBooks();
-		
+		Book book = book_repo.findById(entity.getId()).orElse(null);
+		if(book == null)
+			System.out.println("There is no such a book that has that id number");
+		else
+		{
+			book.setName(entity.getName());
+			book_repo.save(book);
+			printBooks();
+		}
+
 		return "home.jsp";
 	}
 	
 	@RequestMapping("/readBook")
 	public String readBookOperation(Book entity)
 	{
-		Book book = book_repo.findById(entity.getId()).get();
-		System.out.println(book);
+		Book book = book_repo.findById(entity.getId()).orElse(null);
+		if(book == null)
+			System.out.println("There is no such a book that has that id number");
+		else	
+			System.out.println(book);
 		
 		return "home.jsp";
 	}
