@@ -1,14 +1,20 @@
 package com.sezer.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Book 
 {
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
 	private int id;
-	private String name;
+	
+	private String book_name;
 	
 	public Book()
 	{
@@ -27,18 +33,18 @@ public class Book
 
 	public String getName() 
 	{
-		return name;
+		return book_name;
 	}
 
-	public void setName(String name)
+	public void setName(String book_name)
 	{
-		this.name = name;
+		this.book_name = book_name;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "--Book-- id:" + id + " Name:" + name;
+		return "--Book-- id:" + id + " Name:" + book_name;
 	}
 	
 }
