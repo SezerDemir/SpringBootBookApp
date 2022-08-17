@@ -21,15 +21,16 @@ public class BookController {
 		
 	
 	@GetMapping(value="/getBooks")
-	public List<Book> home()
+	public List<Book> getBooks()
 	{
 		return bookService.getBooks();
 	}
 	
 	@PostMapping
-	public void addNewBook(@RequestBody Book book)
+	public Book addNewBook(@RequestBody Book book)
 	{
-		bookService.addBook(book);
+		Book addedBook = bookService.addBook(book);
+		return addedBook;
 	}
 	
 	@DeleteMapping(path="{bookId}")
@@ -39,9 +40,10 @@ public class BookController {
 	}
 	
 	@PostMapping(value="/updateBook")
-	public void updateBook(@RequestBody Book book)
+	public List<Book> updateBook(@RequestBody Book book)
 	{
 		bookService.updateBook(book);
+		return bookService.getBooks(); // updated version is returned
 	}
 
 }

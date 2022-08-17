@@ -17,11 +17,12 @@ public class BookService {
 		return bookRepo.findAll();
 	}
 	
-	public void addBook(Book book)
+	public Book addBook(Book book)
 	{
 		if(book.getName() == null || book.getName().trim().equals("") || book.getPublishDate() == null)
 			throw new IllegalArgumentException("invalid book object");
 		bookRepo.save(book);
+		return bookRepo.findByName(book.getName()).get();
 	}
 	
 	public void removeBook(int id)
@@ -29,13 +30,13 @@ public class BookService {
 		if(bookRepo.existsById(id))
 			bookRepo.deleteById(id);
 		else
-			throw new IllegalStateException("id is not exist in the database");
+			throw new IllegalArgumentException("id is not exist in the database");
 	}
 	
 	public void updateBook(Book book)
 	{
 		if(book == null || !bookRepo.existsById(book.getId()))
-			throw new IllegalStateException("there is no such a book in the database");
+			throw new IllegalArgumentException("there is no such a book in the database");
 		else
 			bookRepo.save(book);
 	}
