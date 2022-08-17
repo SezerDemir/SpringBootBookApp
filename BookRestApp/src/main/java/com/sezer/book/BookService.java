@@ -1,5 +1,6 @@
 package com.sezer.book;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -17,13 +18,19 @@ public class BookService {
 		return bookRepo.findAll();
 	}
 	
+	public List<Book> getBooksByTimeFilter(LocalDate date)
+	{
+		return bookRepo.findByDateFilter(date).get();
+	}
+	
 	public Book addBook(Book book)
 	{
-		if(book.getName() == null || book.getName().trim().equals("") || book.getPublishDate() == null)
+		if(book.getName() == null || book.getName().trim().equals(""))
 			throw new IllegalArgumentException("invalid book object");
 		bookRepo.save(book);
 		return bookRepo.findByName(book.getName()).get();
 	}
+	
 	
 	public void removeBook(int id)
 	{
