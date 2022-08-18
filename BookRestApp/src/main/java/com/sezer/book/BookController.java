@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -21,38 +23,36 @@ public class BookController {
 
 	private final BookService bookService;
 	
-	@GetMapping(value="/getBooks")
-	public List<Book> getBooks()
+	@GetMapping(value="/get")
+	public List<Book> getBooks(@RequestParam(name="index") int index)
 	{
-		return bookService.getBooks();
+		return bookService.getBooks(index);
 	}
 	
-	// returns books those are published after a certain of date
-	@GetMapping(value="/getBooksByTimeFilter/{date}")
+	@GetMapping(value="/getByTimeFilter/{date}")
 	public List<Book> getBookByTimeFilter(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date)
 	{
 		System.out.println(date);
 		return bookService.getBooksByTimeFilter(date);
 	}
 	
-	@PostMapping
+	@PostMapping(value="/add")
 	public Book addNewBook(@RequestBody Book book)
 	{
 		Book addedBook = bookService.addBook(book);
 		return addedBook;
 	}
 	
-	@DeleteMapping(path="{bookId}")
+	@DeleteMapping(path="/delete/{bookId}")
 	public void removeBook(@PathVariable("bookId") int id)
 	{
 		bookService.removeBook(id);
 	}
 	
-	@PostMapping(value="/updateBook")
-	public List<Book> updateBook(@RequestBody Book book)
+	@PutMapping(value="/update")
+	public Book updateBook(@RequestBody Book book)
 	{
-		bookService.updateBook(book);
-		return bookService.getBooks(); // updated version is returned
+		return bookService.updateBook(book);
 	}
 	
 

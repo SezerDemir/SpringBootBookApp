@@ -24,17 +24,12 @@ public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
-	@Column(name = "publish_date")
+	@Column(name = "publish_date" , nullable = false, updatable = false)
     @CreationTimestamp
 	private LocalDate publishDate;
 	
-	public Book(String name, LocalDate publishDate)
-	{
-		this.name = name;
-		this.publishDate = publishDate;
-	}
 	public Book(String name)
 	{
 		this.name = name;

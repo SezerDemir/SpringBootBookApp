@@ -3,6 +3,8 @@ package com.sezer.book;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
@@ -13,9 +15,10 @@ public class BookService {
 	
 	private final BookRepo bookRepo;
 	
-	public List<Book> getBooks()
+	public List<Book> getBooks(int index)
 	{
-		return bookRepo.findAll();
+		PageRequest pr = PageRequest.of(index, 10);
+		return bookRepo.findAll(pr).getContent();
 	}
 	
 	public List<Book> getBooksByTimeFilter(LocalDate date)
@@ -27,8 +30,7 @@ public class BookService {
 	{
 		if(book.getName() == null || book.getName().trim().equals(""))
 			throw new IllegalArgumentException("invalid book object");
-		bookRepo.save(book);
-		return bookRepo.findByName(book.getName()).get();
+		return bookRepo.save(book);
 	}
 	
 	
@@ -40,11 +42,11 @@ public class BookService {
 			throw new IllegalArgumentException("id is not exist in the database");
 	}
 	
-	public void updateBook(Book book)
+	public Book updateBook(Book book)
 	{
 		if(book == null || !bookRepo.existsById(book.getId()))
 			throw new IllegalArgumentException("there is no such a book in the database");
 		else
-			bookRepo.save(book);
+			return bookRepo.save(book);
 	}
 }
