@@ -12,14 +12,18 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@ToString(includeFieldNames = true)
 public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +34,8 @@ public class Book {
     @CreationTimestamp
 	private LocalDate publishDate;
 	
-	public Book(String name)
-	{
+	public Book(String name) {
 		this.name = name;
 	}
-	
-	
-	public String toString()
-	{
-		return "id:" + id + " name:" + name + " PublishDate:" + publishDate; 
-	}
+
 }

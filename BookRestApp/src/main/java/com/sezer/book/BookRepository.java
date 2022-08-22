@@ -12,13 +12,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookRepo extends PagingAndSortingRepository<Book, Integer>{
+public interface BookRepository extends PagingAndSortingRepository<Book, Integer> {
 	
 	@Query("SELECT b FROM Book b WHERE b.name= :name")
 	Book findByName(@Param("name") String name);
 	
 	@Query("SELECT b FROM Book b WHERE b.publishDate > :publish_date")
 	Optional<List<Book>> findByDateFilter(@Param("publish_date") LocalDate localDate);
-	
 	
 }
