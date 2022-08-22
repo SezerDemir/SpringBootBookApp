@@ -3,13 +3,12 @@ package com.sezer.book;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface BookMapper {
-	
-	@Mapping(source = "name", target="bookName")
-	BookDTO toDTO(Book book);
-	
-	@Mapping(source = "bookName", target = "name")
-	Book toBook(BookDTO dto);
+
+	@Mapping(source = "name", target = "bookName")
+	@Mapping(source = "publishDate", target = "publish")
+	BookDTO bookToBookDTO(Book book);
+	Book bookDTOToBook(BookDTO dto);
 	
 }

@@ -1,9 +1,7 @@
 package com.sezer.book;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,7 +30,7 @@ public class BookController {
 	@GetMapping(value="/get")
 	public List<BookDTO> getBooks(@RequestParam(name="index") int pageIndex) {
 		return bookService.getBooks(pageIndex).stream().
-				map(b -> bookMapper.toDTO(b)).
+				map(b -> bookMapper.bookToBookDTO(b)).
 				collect(Collectors.toList());
 	}
 	
@@ -43,8 +41,8 @@ public class BookController {
 	}
 	
 	@PostMapping(value="/add")
-	public Book addNewBook(@RequestBody Book book) {
-		return bookService.addBook(book);
+	public BookDTO addNewBook(@RequestBody Book book) {
+		return bookMapper.bookToBookDTO(bookService.addBook(book));
 	}
 	
 	@DeleteMapping(path="/delete/{bookId}")
@@ -53,8 +51,9 @@ public class BookController {
 	}
 	
 	@PutMapping(value="/update")
-	public Book updateBook(@RequestBody Book book) {
-		return bookService.updateBook(book);
+	public BookDTO updateBook(@RequestBody Book book) {
+		//TODO returns null for publish field
+		return bookMapper.bookToBookDTO(bookService.updateBook(book));
 	}
 	
 }

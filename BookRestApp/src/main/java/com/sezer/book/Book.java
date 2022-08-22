@@ -33,6 +33,8 @@ public class Book {
 	@Column(name = "publish_date" , nullable = false, updatable = false)
     @CreationTimestamp
 	private LocalDate publishDate;
+	@Column(name = "sell_count", nullable = false)
+	private int sellCount;
 	
 	public Book(String name) {
 		this.name = name;

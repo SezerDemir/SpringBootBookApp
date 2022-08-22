@@ -3,7 +3,6 @@ package com.sezer.book;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +15,17 @@ public class BookService {
 	private final BookRepository bookRepo;
 	
 	public List<Book> getBooks(int pageIndex) {
-		PageRequest pr = PageRequest.of(pageIndex, 10);
-		return bookRepo.findAll(pr).getContent();
+
+		return bookRepo.findAll(PageRequest.of(pageIndex, 10)).getContent();
 	}
 	
 	public List<Book> getBooksByTimeFilter(LocalDate date) {
+
 		return bookRepo.findByDateFilter(date).get();
 	}
 	
 	public Book addBook(Book book) {
-		if(book.getName() == null || book.getName().trim().equals(""))
+		if(book == null || book.getName() == null || book.getName().trim().equals(""))
 			throw new IllegalArgumentException("invalid book object");
 		return bookRepo.save(book);
 	}
