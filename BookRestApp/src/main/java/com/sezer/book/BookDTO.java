@@ -10,10 +10,8 @@ import lombok.ToString;
 @Data
 @Builder
 @AllArgsConstructor
-@ToString(includeFieldNames = true)
+@ToString
 public class BookDTO {
 	private int id;
-	private LocalDate publish;
 	private String bookName;
-	
 }

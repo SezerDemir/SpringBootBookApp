@@ -7,7 +7,6 @@ import org.mapstruct.Mapping;
 public interface BookMapper {
 
 	@Mapping(source = "name", target = "bookName")
-	@Mapping(source = "publishDate", target = "publish")
 	BookDTO bookToBookDTO(Book book);
 	Book bookDTOToBook(BookDTO dto);
 	
