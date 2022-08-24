@@ -1,6 +1,8 @@
 package com.sezer.jwt;
 
+import com.sezer.user.Role;
 import com.sezer.user.User;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.http.HttpRequest;
+import java.util.Arrays;
 
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -48,19 +51,26 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private void setAuthenticationContext(String accessToken, HttpServletRequest request) {
         UserDetails userDetails = getUserDetails(accessToken);
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, null);
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
     }
 
     private UserDetails getUserDetails(String accessToken) {
         User userDetails = new User();
-        String[] subjectArray = jwtTokenUtil.getSubject(accessToken).split(",");
+        Claims claims = jwtTokenUtil.parseClaims(accessToken);
+        String[] subjectArray = ((String) claims.get(Claims.SUBJECT)).split(",");
+        String[] roles = ((String) claims.get("roles")).replace("[", "").replace("]", "").split(",");
+
+        for (String r: roles) {
+            userDetails.addRole(new Role(r));
+        }
 
         userDetails.setId(Integer.parseInt(subjectArray[0]));
         userDetails.setEmail(subjectArray[1]);
+
 
         return userDetails;
     }
