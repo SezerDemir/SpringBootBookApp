@@ -32,9 +32,10 @@ public class BookService {
 	public Book addBook(BookDTO book) throws JsonProcessingException {
 		String jsonString = restTemplate.getForObject(baseUrl + book.getISBN() + optionParam, String.class);
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode root = mapper.readTree(jsonString);
-		Book newBook = mapper.treeToValue(root.elements().next(), Book.class);
-		newBook.setIsbn(book.getISBN());
+		JsonNode bookNode = mapper.readTree(jsonString).elements().next();
+		Book newBook = mapper.treeToValue(bookNode, Book.class);
+		newBook.setIsbn(bookNode.findValue("identifiers").findValue("isbn_10").toString()
+				.replace("\"", "").replace("[", "").replace("]",""));
 		return bookRepo.save(newBook);
 	}
 	
