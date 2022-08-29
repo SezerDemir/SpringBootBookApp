@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sezer.BookRestAppApplication;
 import com.sezer.user.User;
 import com.sezer.user.UserRepository;
@@ -53,12 +54,12 @@ public class BookController {
 	
 	@PostMapping(value="/add")
 	@PreAuthorize("hasRole('ADMIN')")
-	public BookDTO addNewBook(@RequestBody Book book) {
+	public BookDTO addNewBook(@RequestBody BookDTO book) throws JsonProcessingException {
 		return bookMapper.bookToBookDTO(bookService.addBook(book));
 	}
 	
 	@DeleteMapping(path="/delete/{bookId}")
-	@PreAuthorize("hasRole('CLIENT')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public void removeBook(@PathVariable("bookId") int id) {
 		bookService.removeBook(id);
 	}

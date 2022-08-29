@@ -6,7 +6,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface BookMapper {
 
-	@Mapping(source = "name", target = "bookName")
+	@Mapping(source = "title", target = "bookName")
+	@Mapping(source = "isbn", target = "ISBN")
 	BookDTO bookToBookDTO(Book book);
 	Book bookDTOToBook(BookDTO dto);
 	

@@ -19,17 +19,17 @@ public class UserRepositoryTests {
     @Test
     public void testCreateUser() {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        String password = "sezerD2";
+        String password = "sezer";
         String encodedPassword = encoder.encode(password);
 
-        User user = User.builder().email("sezer_d2@outlook.com").password(encodedPassword).build();
+        User user = User.builder().email("sezer_d@outlook.com").password(encodedPassword).build();
         assertThat(repo.save(user)).isNotNull();
     }
 
     @Test
     public void testAssignRoleToUser() {
-        Integer userId_1 = 5;
-        Integer roleId_1 = 2;
+        Integer userId_1 = 1;
+        Integer roleId_1 = 1;
 
         User user = repo.findById(userId_1).get();
         user.addRole(Role.builder().id(roleId_1).build());
