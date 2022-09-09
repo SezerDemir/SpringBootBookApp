@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -21,8 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.http.HttpRequest;
-import java.util.Arrays;
 
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -43,20 +39,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
         setAuthenticationContext(accessToken, request);
         filterChain.doFilter(request, response);
     }
 
     private void setAuthenticationContext(String accessToken, HttpServletRequest request) {
         UserDetails userDetails = getUserDetails(accessToken);
-
-
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
@@ -65,15 +55,12 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         Claims claims = jwtTokenUtil.parseClaims(accessToken);
         String[] subjectArray = ((String) claims.get(Claims.SUBJECT)).split(",");
         String[] roles = ((String) claims.get("roles")).replace("[", "").replace("]", "").split(",");
-
         for (String r: roles) {
             userDetails.addRole(new Role(r));
         }
 
         userDetails.setId(Integer.parseInt(subjectArray[0]));
         userDetails.setEmail(subjectArray[1]);
-
-
         return userDetails;
     }
 
@@ -89,6 +76,5 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String header = req.getHeader("Authorization");
         String token = header.split(" ")[1].trim();
         return token;
-
     }
 }

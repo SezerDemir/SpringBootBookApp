@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sezer.config.WebConnectionConfig;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,8 @@ public class BookService {
 	
 	private final BookRepository bookRepo;
 	private final RestTemplate restTemplate;
-	private final String baseUrl = "https://openlibrary.org/api/books?bibkeys=ISBN:";
-	private final String optionParam = "&format=json&jscmd=data";
+	private final WebConnectionConfig webConnectionConfig;
+
 	
 	public List<Book> getBooks(int pageIndex) {
 		return bookRepo.findAll(PageRequest.of(pageIndex, 10)).getContent();
@@ -30,12 +31,11 @@ public class BookService {
 	}
 	
 	public Book addBook(BookDTO book) throws JsonProcessingException {
-		String jsonString = restTemplate.getForObject(baseUrl + book.getISBN() + optionParam, String.class);
+		String jsonString = restTemplate.getForObject(webConnectionConfig.getBaseUrl() + book.getISBN() + webConnectionConfig.getOptionParam(), String.class);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode bookNode = mapper.readTree(jsonString).elements().next();
 		Book newBook = mapper.treeToValue(bookNode, Book.class);
-		newBook.setIsbn(bookNode.findValue("identifiers").findValue("isbn_10").toString()
-				.replace("\"", "").replace("[", "").replace("]",""));
+		newBook.setIsbn(book.getISBN());
 		return bookRepo.save(newBook);
 	}
 	

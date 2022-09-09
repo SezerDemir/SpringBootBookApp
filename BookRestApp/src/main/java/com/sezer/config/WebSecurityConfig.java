@@ -59,7 +59,6 @@ public class WebSecurityConfig{
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         http.authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
                 .anyRequest().authenticated();
@@ -73,9 +72,7 @@ public class WebSecurityConfig{
                             );
                         }
                 );
-
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }
